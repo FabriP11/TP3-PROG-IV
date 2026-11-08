@@ -1,0 +1,8 @@
+### Obtener todos los vehículos
+GET http://localhost:3000/vehiculos
+
+### Obtener vehículo por ID
+GET http://localhost:3000/vehiculos/1
+
+### Probar ID inválido
+GET http://localhost:3000/vehiculos/abc
