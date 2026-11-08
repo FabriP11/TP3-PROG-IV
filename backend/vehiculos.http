@@ -6,3 +6,27 @@ GET http://localhost:3000/vehiculos/1
 
 ### Probar ID inválido
 GET http://localhost:3000/vehiculos/abc
+
+### Registrar un vehículo
+POST http://localhost:3000/vehiculos
+Content-Type: application/json
+
+{
+  "marca": "Fiat",
+  "modelo": "Cronos",
+  "patente": "AF104GA",
+  "anio": 2021,
+  "capacidad_carga": 18000
+}
+
+### Probar vehículo con datos incorrectos
+POST http://localhost:3000/vehiculos
+Content-Type: application/json
+
+{
+  "marca": "",
+  "modelo": "Cronos",
+  "patente": "AF104GA",
+  "anio": 1800,
+  "capacidad_carga": -500
+}
