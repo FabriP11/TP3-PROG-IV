@@ -97,4 +97,72 @@ router.post('/', validarConductor, verificarValidaciones, async (req, res) => {
   }
 })
 
+// PUT - Modificar un conductor
+router.put(
+  '/:id',
+  validarId,
+  validarConductor,
+  verificarValidaciones,
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id)
+
+      const {
+        nombre,
+        apellido,
+        numero_documento,
+        numero_licencia,
+        fecha_alta_licencia,
+        fecha_vencimiento_licencia
+      } = req.body
+
+      // Verificar si existe el conductor
+      const [conductores] = await db.execute(
+        'SELECT id FROM conductores WHERE id = ?',
+        [id]
+      )
+
+      if (conductores.length === 0) {
+        return res.status(404).json({
+          mensaje: 'Conductor no encontrado'
+        })
+      }
+
+      // Actualizar los datos
+      await db.execute(
+        `UPDATE conductores
+         SET nombre = ?, apellido = ?, numero_documento = ?,
+             numero_licencia = ?, fecha_alta_licencia = ?,
+             fecha_vencimiento_licencia = ?
+         WHERE id = ?`,
+        [
+          nombre,
+          apellido,
+          numero_documento,
+          numero_licencia,
+          fecha_alta_licencia,
+          fecha_vencimiento_licencia,
+          id
+        ]
+      )
+
+      res.json({
+        mensaje: 'Conductor actualizado correctamente'
+      })
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        return res.status(409).json({
+          mensaje: 'El documento o número de licencia ya está registrado'
+        })
+      }
+
+      console.error(error)
+
+      res.status(500).json({
+        mensaje: 'Error al actualizar el conductor'
+      })
+    }
+  }
+)
+
 export default router
