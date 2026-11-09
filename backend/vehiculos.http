@@ -42,3 +42,6 @@ Content-Type: application/json
   "anio": 2023,
   "capacidad_carga": 20000
 }
+
+### Eliminar un vehículo
+DELETE http://localhost:3000/vehiculos/2
