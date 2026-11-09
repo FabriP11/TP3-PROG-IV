@@ -30,3 +30,15 @@ Content-Type: application/json
   "anio": 1800,
   "capacidad_carga": -500
 }
+
+### Modificar un vehículo
+PUT http://localhost:3000/vehiculos/2
+Content-Type: application/json
+
+{
+  "marca": "Fiat",
+  "modelo": "Cronos Sport",
+  "patente": "AF104GA",
+  "anio": 2023,
+  "capacidad_carga": 20000
+}
