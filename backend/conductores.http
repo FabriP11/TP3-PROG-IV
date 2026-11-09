@@ -32,3 +32,16 @@ Content-Type: application/json
   "fecha_alta_licencia": "fecha incorrecta",
   "fecha_vencimiento_licencia": "2028-08-29"
 }
+
+### Modificar un conductor
+PUT http://localhost:3000/conductores/1
+Content-Type: application/json
+
+{
+  "nombre": "Fabricio Nicolas",
+  "apellido": "Ponce",
+  "numero_documento": "39701035",
+  "numero_licencia": "39701035",
+  "fecha_alta_licencia": "2023-08-29",
+  "fecha_vencimiento_licencia": "2028-08-29"
+}
