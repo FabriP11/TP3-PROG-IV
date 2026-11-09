@@ -165,4 +165,38 @@ router.put(
   }
 )
 
+// DELETE - Eliminar un conductor
+router.delete('/:id', validarId, verificarValidaciones, async (req, res) => {
+  try {
+    const id = Number(req.params.id)
+
+    const [resultado] = await db.execute(
+      'DELETE FROM conductores WHERE id = ?',
+      [id]
+    )
+
+    if (resultado.affectedRows === 0) {
+      return res.status(404).json({
+        mensaje: 'Conductor no encontrado'
+      })
+    }
+
+    res.json({
+      mensaje: 'Conductor eliminado correctamente'
+    })
+  } catch (error) {
+    if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+      return res.status(409).json({
+        mensaje: 'No se puede eliminar un conductor con viajes registrados'
+      })
+    }
+
+    console.error(error)
+
+    res.status(500).json({
+      mensaje: 'Error al eliminar el conductor'
+    })
+  }
+})
+
 export default router
