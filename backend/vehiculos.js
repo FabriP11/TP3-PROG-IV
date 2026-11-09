@@ -132,4 +132,37 @@ router.put(
   }
 )
 
+// DELETE - Eliminar un vehículo
+router.delete('/:id', validarId, verificarValidaciones, async (req, res) => {
+  try {
+    const id = Number(req.params.id)
+
+    const [resultado] = await db.execute('DELETE FROM vehiculos WHERE id = ?', [
+      id
+    ])
+
+    if (resultado.affectedRows === 0) {
+      return res.status(404).json({
+        mensaje: 'Vehículo no encontrado'
+      })
+    }
+
+    res.json({
+      mensaje: 'Vehículo eliminado correctamente'
+    })
+  } catch (error) {
+    if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+      return res.status(409).json({
+        mensaje: 'No se puede eliminar un vehículo con viajes registrados'
+      })
+    }
+
+    console.error(error)
+
+    res.status(500).json({
+      mensaje: 'Error al eliminar el vehículo'
+    })
+  }
+})
+
 export default router
