@@ -42,3 +42,28 @@ export const validarVehiculo = [
     .isFloat({ gt: 0 })
     .withMessage('La capacidad de carga debe ser mayor a cero')
 ]
+
+// Validaciones para registrar conductores
+export const validarConductor = [
+  body('nombre').trim().notEmpty().withMessage('El nombre es obligatorio'),
+
+  body('apellido').trim().notEmpty().withMessage('El apellido es obligatorio'),
+
+  body('numero_documento')
+    .trim()
+    .notEmpty()
+    .withMessage('El número de documento es obligatorio'),
+
+  body('numero_licencia')
+    .trim()
+    .notEmpty()
+    .withMessage('El número de licencia es obligatorio'),
+
+  body('fecha_alta_licencia')
+    .isDate({ format: 'YYYY-MM-DD', strictMode: true })
+    .withMessage('La fecha de alta no es válida'),
+
+  body('fecha_vencimiento_licencia')
+    .isDate({ format: 'YYYY-MM-DD', strictMode: true })
+    .withMessage('La fecha de vencimiento no es válida')
+]
