@@ -80,4 +80,56 @@ router.post('/', validarVehiculo, verificarValidaciones, async (req, res) => {
   }
 })
 
+// PUT - Modificar un vehículo
+router.put(
+  '/:id',
+  validarId,
+  validarVehiculo,
+  verificarValidaciones,
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id)
+
+      const { marca, modelo, patente, anio, capacidad_carga } = req.body
+
+      // Verificar si existe el vehículo
+      const [vehiculos] = await db.execute(
+        'SELECT id FROM vehiculos WHERE id = ?',
+        [id]
+      )
+
+      if (vehiculos.length === 0) {
+        return res.status(404).json({
+          mensaje: 'Vehículo no encontrado'
+        })
+      }
+
+      // Actualizar los datos
+      await db.execute(
+        `UPDATE vehiculos
+         SET marca = ?, modelo = ?, patente = ?,
+             anio = ?, capacidad_carga = ?
+         WHERE id = ?`,
+        [marca, modelo, patente, anio, capacidad_carga, id]
+      )
+
+      res.json({
+        mensaje: 'Vehículo actualizado correctamente'
+      })
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        return res.status(409).json({
+          mensaje: 'La patente ya está registrada'
+        })
+      }
+
+      console.error(error)
+
+      res.status(500).json({
+        mensaje: 'Error al actualizar el vehículo'
+      })
+    }
+  }
+)
+
 export default router
