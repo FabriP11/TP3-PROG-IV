@@ -6,3 +6,29 @@ GET http://localhost:3000/conductores/1
 
 ### Consultar conductor con ID inválido
 GET http://localhost:3000/conductores/abc
+
+### Registrar un conductor
+POST http://localhost:3000/conductores
+Content-Type: application/json
+
+{
+  "nombre": "Fabricio",
+  "apellido": "Ponce",
+  "numero_documento": "39701035",
+  "numero_licencia": "003-2391-23",
+  "fecha_alta_licencia": "2023-08-29",
+  "fecha_vencimiento_licencia": "2028-08-29"
+}
+
+### Registrar conductor con datos incorrectos
+POST http://localhost:3000/conductores
+Content-Type: application/json
+
+{
+  "nombre": "",
+  "apellido": "Lucero",
+  "numero_documento": "",
+  "numero_licencia": "",
+  "fecha_alta_licencia": "fecha incorrecta",
+  "fecha_vencimiento_licencia": "2028-08-29"
+}
