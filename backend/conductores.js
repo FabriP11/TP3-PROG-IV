@@ -1,6 +1,10 @@
 import express from 'express'
 import { db } from './db.js'
-import { validarId, verificarValidaciones } from './validaciones.js'
+import {
+  validarId,
+  validarConductor,
+  verificarValidaciones
+} from './validaciones.js'
 
 const router = express.Router()
 
@@ -43,6 +47,52 @@ router.get('/:id', validarId, verificarValidaciones, async (req, res) => {
 
     res.status(500).json({
       mensaje: 'Error al obtener el conductor'
+    })
+  }
+})
+
+// POST - Registrar un conductor
+router.post('/', validarConductor, verificarValidaciones, async (req, res) => {
+  try {
+    const {
+      nombre,
+      apellido,
+      numero_documento,
+      numero_licencia,
+      fecha_alta_licencia,
+      fecha_vencimiento_licencia
+    } = req.body
+
+    const [resultado] = await db.execute(
+      `INSERT INTO conductores
+        (nombre, apellido, numero_documento, numero_licencia,
+         fecha_alta_licencia, fecha_vencimiento_licencia)
+        VALUES (?, ?, ?, ?, ?, ?)`,
+      [
+        nombre,
+        apellido,
+        numero_documento,
+        numero_licencia,
+        fecha_alta_licencia,
+        fecha_vencimiento_licencia
+      ]
+    )
+
+    res.status(201).json({
+      mensaje: 'Conductor registrado correctamente',
+      id: resultado.insertId
+    })
+  } catch (error) {
+    if (error.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({
+        mensaje: 'El documento o número de licencia ya está registrado'
+      })
+    }
+
+    console.error(error)
+
+    res.status(500).json({
+      mensaje: 'Error al registrar el conductor'
     })
   }
 })
