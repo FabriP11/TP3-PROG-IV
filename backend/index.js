@@ -1,6 +1,7 @@
 import express from 'express'
 import { conectarDB } from './db.js'
 import vehiculosRouter from './vehiculos.js'
+import conductoresRouter from './conductores.js'
 
 const app = express()
 const port = 3000
@@ -14,6 +15,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/vehiculos', vehiculosRouter)
+app.use('/conductores', conductoresRouter)
 
 app.listen(port, () => {
   console.log(`La aplicación está funcionando en ${port}`)
