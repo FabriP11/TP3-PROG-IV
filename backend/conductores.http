@@ -1,0 +1,8 @@
+### Obtener todos los conductores
+GET http://localhost:3000/conductores
+
+### Obtener conductor por ID
+GET http://localhost:3000/conductores/1
+
+### Consultar conductor con ID inválido
+GET http://localhost:3000/conductores/abc
