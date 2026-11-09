@@ -1,0 +1,9 @@
+### Registrar usuario
+POST http://localhost:3000/usuarios
+Content-Type: application/json
+
+{
+  "nombre": "Fabricio Ponce",
+  "email": "fabricioponce@gmail.com",
+  "contrasena": "fabriponce1996"
+}
