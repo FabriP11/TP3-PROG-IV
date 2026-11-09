@@ -20,6 +20,19 @@ Content-Type: application/json
   "fecha_vencimiento_licencia": "2028-08-29"
 }
 
+### Registrar un segundo conductor
+POST http://localhost:3000/conductores
+Content-Type: application/json
+
+{
+  "nombre": "Florencia",
+  "apellido": "Lucero",
+  "numero_documento": "39438920",
+  "numero_licencia": "001-5505-87",
+  "fecha_alta_licencia": "2024-10-15",
+  "fecha_vencimiento_licencia": "2029-10-15"
+}
+
 ### Registrar conductor con datos incorrectos
 POST http://localhost:3000/conductores
 Content-Type: application/json
@@ -45,3 +58,6 @@ Content-Type: application/json
   "fecha_alta_licencia": "2023-08-29",
   "fecha_vencimiento_licencia": "2028-08-29"
 }
+
+### Eliminar un conductor
+DELETE http://localhost:3000/conductores/2
