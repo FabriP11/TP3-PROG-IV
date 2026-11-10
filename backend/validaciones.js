@@ -73,3 +73,35 @@ export const validarConductor = [
     .isDate({ format: 'YYYY-MM-DD', strictMode: true })
     .withMessage('La fecha de vencimiento no es válida')
 ]
+
+// Validaciones para registrar viajes
+export const validarViaje = [
+  body('vehiculo_id')
+    .isInt({ min: 1 })
+    .withMessage('El ID del vehículo no es válido'),
+
+  body('conductor_id')
+    .isInt({ min: 1 })
+    .withMessage('El ID del conductor no es válido'),
+
+  body('fecha_salida')
+    .isISO8601({ strict: true })
+    .withMessage('La fecha de salida no es válida'),
+
+  body('fecha_llegada')
+    .isISO8601({ strict: true })
+    .withMessage('La fecha de llegada no es válida'),
+
+  body('origen').trim().notEmpty().withMessage('El origen es obligatorio'),
+
+  body('destino').trim().notEmpty().withMessage('El destino es obligatorio'),
+
+  body('kilometros')
+    .isFloat({ gt: 0 })
+    .withMessage('Los kilómetros deben ser mayores a cero'),
+
+  body('observaciones')
+    .optional()
+    .isString()
+    .withMessage('Las observaciones deben ser texto')
+]
