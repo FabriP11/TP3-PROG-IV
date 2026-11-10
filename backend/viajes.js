@@ -126,4 +126,80 @@ router.post(
   }
 )
 
+// GET - Historial de viajes por vehículo
+router.get(
+  '/vehiculo/:id',
+  validarAutenticacion,
+  validarId,
+  verificarValidaciones,
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id)
+
+      const [viajes] = await db.execute(
+        `SELECT * FROM viajes
+         WHERE vehiculo_id = ?
+         ORDER BY fecha_salida DESC`,
+        [id]
+      )
+
+      const [totales] = await db.execute(
+        `SELECT COALESCE(SUM(kilometros), 0) AS total_kilometros
+         FROM viajes
+         WHERE vehiculo_id = ?`,
+        [id]
+      )
+
+      res.json({
+        viajes,
+        total_kilometros: totales[0].total_kilometros
+      })
+    } catch (error) {
+      console.error(error)
+
+      res.status(500).json({
+        mensaje: 'Error al consultar el historial del vehículo'
+      })
+    }
+  }
+)
+
+// GET - Historial de viajes por conductor
+router.get(
+  '/conductor/:id',
+  validarAutenticacion,
+  validarId,
+  verificarValidaciones,
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id)
+
+      const [viajes] = await db.execute(
+        `SELECT * FROM viajes
+         WHERE conductor_id = ?
+         ORDER BY fecha_salida DESC`,
+        [id]
+      )
+
+      const [totales] = await db.execute(
+        `SELECT COALESCE(SUM(kilometros), 0) AS total_kilometros
+         FROM viajes
+         WHERE conductor_id = ?`,
+        [id]
+      )
+
+      res.json({
+        viajes,
+        total_kilometros: totales[0].total_kilometros
+      })
+    } catch (error) {
+      console.error(error)
+
+      res.status(500).json({
+        mensaje: 'Error al consultar el historial del conductor'
+      })
+    }
+  }
+)
+
 export default router
