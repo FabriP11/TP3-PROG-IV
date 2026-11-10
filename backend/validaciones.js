@@ -1,4 +1,10 @@
 import { body, param, validationResult } from 'express-validator'
+import passport from 'passport'
+
+// Validación de autenticación
+export const validarAutenticacion = passport.authenticate('jwt', {
+  session: false
+})
 
 // Validar ID recibido por parámetro
 export const validarId = param('id')
