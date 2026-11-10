@@ -3,7 +3,7 @@ import { conectarDB } from './db.js'
 import vehiculosRouter from './vehiculos.js'
 import conductoresRouter from './conductores.js'
 import usuariosRouter from './usuarios.js'
-import authRouter from './auth.js'
+import authRouter, { authConfig } from './auth.js'
 
 const app = express()
 const port = 3000
@@ -11,6 +11,7 @@ const port = 3000
 app.use(express.json())
 
 await conectarDB()
+authConfig()
 
 app.get('/', (req, res) => {
   res.json({ mensaje: 'API del TP3 funcionando correctamente' })
