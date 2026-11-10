@@ -4,6 +4,7 @@ import vehiculosRouter from './vehiculos.js'
 import conductoresRouter from './conductores.js'
 import usuariosRouter from './usuarios.js'
 import authRouter, { authConfig } from './auth.js'
+import viajesRouter from './viajes.js'
 
 const app = express()
 const port = 3000
@@ -21,6 +22,7 @@ app.use('/vehiculos', vehiculosRouter)
 app.use('/conductores', conductoresRouter)
 app.use('/usuarios', usuariosRouter)
 app.use('/auth', authRouter)
+app.use('/viajes', viajesRouter)
 
 app.listen(port, () => {
   console.log(`La aplicación está funcionando en ${port}`)
