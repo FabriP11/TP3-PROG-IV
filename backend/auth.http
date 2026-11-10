@@ -9,3 +9,14 @@ Content-Type: application/json
   "email": "fabricioponce@gmail.com",
   "contrasena": "fabriponce1996"
 }
+
+### Consultar vehículos con token
+GET {{url}}/vehiculos
+Authorization: Bearer {{login.response.body.$.token}}
+
+### Consultar conductores con token
+GET {{url}}/conductores
+Authorization: Bearer {{login.response.body.$.token}}
+
+### Consultar vehículos SIN token
+GET http://localhost:3000/vehiculos
