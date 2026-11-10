@@ -21,3 +21,35 @@ Authorization: Bearer {{login.response.body.$.token}}
 ### Consultar viaje con ID inválido
 GET {{url}}/viajes/abc
 Authorization: Bearer {{login.response.body.$.token}}
+
+### Registrar un viaje
+POST {{url}}/viajes
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "vehiculo_id": 1,
+  "conductor_id": 1,
+  "fecha_salida": "2026-11-10T08:00:00",
+  "fecha_llegada": "2026-11-10T15:00:00",
+  "origen": "La Rioja",
+  "destino": "Cordoba",
+  "kilometros": 435,
+  "observaciones": "Viaje a ver al Papa"
+}
+
+### Registrar viaje con datos incorrectos
+POST {{url}}/viajes
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "vehiculo_id": -1,
+  "conductor_id": 0,
+  "fecha_salida": "fecha incorrecta",
+  "fecha_llegada": "2026-11-10T15:00:00",
+  "origen": "",
+  "destino": "",
+  "kilometros": -50,
+  "observaciones": ""
+}
