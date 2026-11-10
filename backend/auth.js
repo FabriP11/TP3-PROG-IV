@@ -4,8 +4,24 @@ import { body } from 'express-validator'
 import { verificarValidaciones } from './validaciones.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import passport from 'passport'
+import { Strategy, ExtractJwt } from 'passport-jwt'
 
 const router = express.Router()
+
+// Configuración de Passport con JWT
+export function authConfig () {
+  const jwtOptions = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: process.env.JWT_SECRET
+  }
+
+  passport.use(
+    new Strategy(jwtOptions, async (payload, next) => {
+      next(null, payload)
+    })
+  )
+}
 
 // POST - Iniciar sesión
 router.post(
