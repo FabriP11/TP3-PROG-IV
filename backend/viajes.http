@@ -53,3 +53,11 @@ Content-Type: application/json
   "kilometros": -50,
   "observaciones": ""
 }
+
+### Historial de viajes por vehículo
+GET {{url}}/viajes/vehiculo/1
+Authorization: Bearer {{login.response.body.$.token}}
+
+### Historial de viajes por conductor
+GET {{url}}/viajes/conductor/1
+Authorization: Bearer {{login.response.body.$.token}}
