@@ -1,6 +1,7 @@
 import express from 'express'
 import { db } from './db.js'
 import {
+  validarAutenticacion,
   validarId,
   validarVehiculo,
   verificarValidaciones
@@ -9,7 +10,7 @@ import {
 const router = express.Router()
 
 // GET - Obtener todos los vehículos
-router.get('/', async (req, res) => {
+router.get('/', validarAutenticacion, async (req, res) => {
   try {
     const [vehiculos] = await db.execute('SELECT * FROM vehiculos ORDER BY id')
 
@@ -24,65 +25,78 @@ router.get('/', async (req, res) => {
 })
 
 // GET - Obtener un vehículo por ID
-router.get('/:id', validarId, verificarValidaciones, async (req, res) => {
-  try {
-    const id = Number(req.params.id)
+router.get(
+  '/:id',
+  validarAutenticacion,
+  validarId,
+  verificarValidaciones,
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id)
 
-    const [vehiculos] = await db.execute(
-      'SELECT * FROM vehiculos WHERE id = ?',
-      [id]
-    )
+      const [vehiculos] = await db.execute(
+        'SELECT * FROM vehiculos WHERE id = ?',
+        [id]
+      )
 
-    if (vehiculos.length === 0) {
-      return res.status(404).json({
-        mensaje: 'Vehículo no encontrado'
+      if (vehiculos.length === 0) {
+        return res.status(404).json({
+          mensaje: 'Vehículo no encontrado'
+        })
+      }
+
+      res.json(vehiculos[0])
+    } catch (error) {
+      console.error(error)
+
+      res.status(500).json({
+        mensaje: 'Error al obtener el vehículo'
       })
     }
-
-    res.json(vehiculos[0])
-  } catch (error) {
-    console.error(error)
-
-    res.status(500).json({
-      mensaje: 'Error al obtener el vehículo'
-    })
   }
-})
+)
 
 // POST - Registrar un vehículo
-router.post('/', validarVehiculo, verificarValidaciones, async (req, res) => {
-  try {
-    const { marca, modelo, patente, anio, capacidad_carga } = req.body
+router.post(
+  '/',
+  validarAutenticacion,
+  validarVehiculo,
+  verificarValidaciones,
+  async (req, res) => {
+    try {
+      const { marca, modelo, patente, anio, capacidad_carga } = req.body
 
-    const [resultado] = await db.execute(
-      `INSERT INTO vehiculos
+      const [resultado] = await db.execute(
+        `INSERT INTO vehiculos
         (marca, modelo, patente, anio, capacidad_carga)
         VALUES (?, ?, ?, ?, ?)`,
-      [marca, modelo, patente, anio, capacidad_carga]
-    )
+        [marca, modelo, patente, anio, capacidad_carga]
+      )
 
-    res.status(201).json({
-      mensaje: 'Vehículo registrado correctamente',
-      id: resultado.insertId
-    })
-  } catch (error) {
-    if (error.code === 'ER_DUP_ENTRY') {
-      return res.status(409).json({
-        mensaje: 'La patente ya está registrada'
+      res.status(201).json({
+        mensaje: 'Vehículo registrado correctamente',
+        id: resultado.insertId
+      })
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        return res.status(409).json({
+          mensaje: 'La patente ya está registrada'
+        })
+      }
+
+      console.error(error)
+
+      res.status(500).json({
+        mensaje: 'Error al registrar el vehículo'
       })
     }
-
-    console.error(error)
-
-    res.status(500).json({
-      mensaje: 'Error al registrar el vehículo'
-    })
   }
-})
+)
 
 // PUT - Modificar un vehículo
 router.put(
   '/:id',
+  validarAutenticacion,
   validarId,
   validarVehiculo,
   verificarValidaciones,
@@ -133,36 +147,43 @@ router.put(
 )
 
 // DELETE - Eliminar un vehículo
-router.delete('/:id', validarId, verificarValidaciones, async (req, res) => {
-  try {
-    const id = Number(req.params.id)
+router.delete(
+  '/:id',
+  validarAutenticacion,
+  validarId,
+  verificarValidaciones,
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id)
 
-    const [resultado] = await db.execute('DELETE FROM vehiculos WHERE id = ?', [
-      id
-    ])
+      const [resultado] = await db.execute(
+        'DELETE FROM vehiculos WHERE id = ?',
+        [id]
+      )
 
-    if (resultado.affectedRows === 0) {
-      return res.status(404).json({
-        mensaje: 'Vehículo no encontrado'
+      if (resultado.affectedRows === 0) {
+        return res.status(404).json({
+          mensaje: 'Vehículo no encontrado'
+        })
+      }
+
+      res.json({
+        mensaje: 'Vehículo eliminado correctamente'
+      })
+    } catch (error) {
+      if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+        return res.status(409).json({
+          mensaje: 'No se puede eliminar un vehículo con viajes registrados'
+        })
+      }
+
+      console.error(error)
+
+      res.status(500).json({
+        mensaje: 'Error al eliminar el vehículo'
       })
     }
-
-    res.json({
-      mensaje: 'Vehículo eliminado correctamente'
-    })
-  } catch (error) {
-    if (error.code === 'ER_ROW_IS_REFERENCED_2') {
-      return res.status(409).json({
-        mensaje: 'No se puede eliminar un vehículo con viajes registrados'
-      })
-    }
-
-    console.error(error)
-
-    res.status(500).json({
-      mensaje: 'Error al eliminar el vehículo'
-    })
   }
-})
+)
 
 export default router
