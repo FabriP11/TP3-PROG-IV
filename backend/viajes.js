@@ -3,6 +3,7 @@ import { db } from './db.js'
 import {
   validarAutenticacion,
   validarId,
+  validarViaje,
   verificarValidaciones
 } from './validaciones.js'
 
@@ -64,6 +65,62 @@ router.get(
 
       res.status(500).json({
         mensaje: 'Error al obtener el viaje'
+      })
+    }
+  }
+)
+
+// POST - Registrar un viaje
+router.post(
+  '/',
+  validarAutenticacion,
+  validarViaje,
+  verificarValidaciones,
+  async (req, res) => {
+    try {
+      const {
+        vehiculo_id,
+        conductor_id,
+        fecha_salida,
+        fecha_llegada,
+        origen,
+        destino,
+        kilometros,
+        observaciones
+      } = req.body
+
+      const [resultado] = await db.execute(
+        `INSERT INTO viajes
+         (vehiculo_id, conductor_id, fecha_salida, fecha_llegada,
+          origen, destino, kilometros, observaciones)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          vehiculo_id,
+          conductor_id,
+          fecha_salida.replace('T', ' '),
+          fecha_llegada.replace('T', ' '),
+          origen,
+          destino,
+          kilometros,
+          observaciones ?? null
+        ]
+      )
+
+      res.status(201).json({
+        mensaje: 'Viaje registrado correctamente',
+        id: resultado.insertId
+      })
+    } catch (error) {
+      if (error.code === 'ER_NO_REFERENCED_ROW_2') {
+        return res.status(400).json({
+          mensaje: 'El vehículo o conductor indicado no existe'
+        })
+      }
+
+      console.error(error)
+
+      res.status(500).json({
+        mensaje: 'Error al registrar el viaje'
       })
     }
   }
