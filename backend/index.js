@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import { conectarDB } from './db.js'
 import vehiculosRouter from './vehiculos.js'
 import conductoresRouter from './conductores.js'
@@ -9,6 +10,7 @@ import viajesRouter from './viajes.js'
 const app = express()
 const port = 3000
 
+app.use(cors())
 app.use(express.json())
 
 await conectarDB()
