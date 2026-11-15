@@ -18,7 +18,10 @@ function Layout() {
           {isAuthenticated ? (
             <button onClick={logout}>Cerrar sesión</button>
           ) : (
-            <Link to="/login">Ingresar</Link>
+            <>
+              <Link to="/login">Ingresar</Link>
+              <Link to="/registro">Registrarse</Link>
+            </>
           )}
         </nav>
       </header>
