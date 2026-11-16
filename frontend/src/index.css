@@ -41,9 +41,9 @@ nav button {
 }
 
 main {
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
-  padding: 25px;
+  padding: 10px;
 }
 
 h1 {
@@ -56,10 +56,10 @@ h2 {
 
 form {
   background-color: white;
-  padding: 20px;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 6px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   max-width: 650px;
 }
 
@@ -147,8 +147,8 @@ main a {
 
 .gestion-columnas {
   display: grid;
-  grid-template-columns: 400px minmax(0, 1fr);
-  gap: 25px;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 20px;
   align-items: start;
   margin-top: 20px;
 }
@@ -168,7 +168,7 @@ main a {
 
 .tabla-scroll {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: visible;
 }
 
 .tabla-scroll table {
@@ -176,7 +176,14 @@ main a {
   display: table;
 }
 
-@media (max-width: 950px) {
+.tabla-scroll th,
+.tabla-scroll td {
+  padding: 8px 6px;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+@media (max-width: 1150px) {
   .gestion-columnas {
     grid-template-columns: 1fr;
   }
